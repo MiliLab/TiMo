@@ -60,7 +60,7 @@ class Attention(nn.Module):
         self.attn_drop = nn.Dropout(attn_drop)
         self.kv = nn.Linear(dim, dim * 2, bias=qkv_bias)
         self.INF=INF
-        self.cheap_operation = nn.Sequential(  # 黄色部分所用的普通的卷积运算，生成红色部分,参考ghostnet
+        self.cheap_operation = nn.Sequential(  
             nn.Linear(head_dim, 1, bias=False),
             nn.BatchNorm1d(1),
             nn.ReLU(inplace=True),
@@ -299,7 +299,7 @@ class OverlapPatchEmbed(nn.Module):
 
     def forward(self, x):
         # print('223',x.shape)
-        x = self.proj(x)#下采样两倍
+        x = self.proj(x)
         # print('225', x.shape)
         _, _, H, W = x.shape
         x = x.flatten(2).transpose(1, 2)
@@ -444,7 +444,7 @@ class TiMo(nn.Module):
         B,T,C,H,W=x.shape
         x = self.forward_features(x)
         if returntp==False:
-            x=x.view(B,T,*x.shape[-3:])#三个时相加起来，然后做1*1卷积融合，2dmaxpool
+            x=x.view(B,T,*x.shape[-3:])
             x=x.mean(dim=[1,3,4])
         if returntp==True:
             x = x.mean(dim=[2, 3])
