@@ -205,14 +205,14 @@ class OverlapPatchEmbed(nn.Module):
 
     def forward(self, x):
         
-        x = self.proj(x)  # 下采样两倍
+        x = self.proj(x) 
        
         _, _, H, W = x.shape
         
         x = x.flatten(2).transpose(1, 2)
         x = self.norm(x)
        
-        return x#, H, W
+        return x
 
 def get_resized_mask(target_size: torch.Size, mask: torch.Tensor) -> torch.Tensor:
     # target_size: [(T), (H), W]
