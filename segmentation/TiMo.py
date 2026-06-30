@@ -463,8 +463,8 @@ def TiMo_large(**kwargs):
 
 def TiMo_huge(**kwargs):
     model = TiMo(
-        embed_dims=[352,704,1408,2816], sa_num_heads=[ 8, 16, 32, 64 ], mlp_ratios=[4, 4, 4, 4],
-        qkv_bias=True, depths=[2, 2, 18, 2], local=[2, 2, 0, 0], head_conv=7,
+        embed_dims=[512,1024,1280,2048], sa_num_heads=[ 8, 16, 32, 64 ], mlp_ratios=[4, 4, 4, 4],
+        qkv_bias=True, depths=[3, 3, 22, 3], local=[2, 2, 0, 0], head_conv=7,
         use_pos='ts', **kwargs)
     model.default_cfg = _cfg()
 
