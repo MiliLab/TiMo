@@ -108,7 +108,7 @@ class SeasonalContrastTemporal(SeasonalContrastBase):
 
 
 
-class SeasonalContrastTemporal_v3(SeasonalContrastBase):#跟v2相比返回了paths
+class SeasonalContrastTemporal_v3(SeasonalContrastBase):
 
     def get_samples(self):
         return [path for path in self.root.glob('*') if path.is_dir()]
@@ -182,8 +182,8 @@ class TPCO_npy_ts(torch.utils.data.Dataset):
         self.totensor = transforms.ToTensor()
         self.scale = transforms.Resize(224)
     def __getitem__(self, index):
-        # try:
-        ts =  np.load(os.path.join(self.root,str(self.ids['loc'][index]).zfill(6)+'.npy'))#.transpose(0,3,1,2) # [4,13,264,264] int16 or uint8
+        
+        ts =  np.load(os.path.join(self.root,str(self.ids['loc'][index]).zfill(6)+'.npy'))
 
         self.transform=transforms.Compose([self.totensor,self.scale])
         ts=torch.stack([self.transform((t/255).transpose(1,2,0).astype(np.float32)) for t in ts])
@@ -199,7 +199,7 @@ class TPCO_npy_ts(torch.utils.data.Dataset):
         return ts,dates,ts
 
     def parse_timestamp(self, timestamp):
-        # print('timestamp',timestamp)
+       
         year = int(timestamp[:4])
         month = int(timestamp[4:6])
         day = int(timestamp[6:8])
