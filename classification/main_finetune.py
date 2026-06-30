@@ -183,43 +183,36 @@ def main(args):
         # if 'MASTER_ADDR' not in os.environ:
         if 'SLURM_NTASKS' in os.environ.keys():
             # logger.info('#################### srun for DDP! ############################')
-            # torch.multiprocessing.set_start_method('spawn')
+            
             args.world_size = int(os.environ['SLURM_NTASKS'])
-            # args.world_size = int(os.environ['WORLD_SIZE']) if 'WORLD_SIZE' in os.environ else 1
+            
             args.rank = int(os.environ['SLURM_PROCID'])  # if 'RANK' in os.environ else 0
-            # args.rank = int(os.environ["RANK"])
-            # args.rank = dist.get_rank()
+           
             LOCAL_RANK = int(os.environ['SLURM_LOCALID'])
-            # LOCAL_RANK = int(os.environ['LOCAL_RANK'])
-            # LOCAL_RANK = args.rank % torch.cuda.device_count()
-            # IP = os.environ['SLURM_STEP_NODELIST']
-            # DIST_URL = 'tcp://' + IP + ':' + str(port)
-            torch.cuda.set_device(LOCAL_RANK)  # 设置节点等级为GPU数
-            # os.environ['MASTER_PORT'] = args.port
+            
+            torch.cuda.set_device(LOCAL_RANK)  
+            
             node_list = os.environ['SLURM_NODELIST']
             addr = subprocess.getoutput(f'scontrol show hostname {node_list} | head -n1')
-            # os.environ['MASTER_ADDR'] = addr
+            
             dist_url = 'tcp://%s:%s' % (addr, args.port)
             dist.init_process_group(backend='nccl', init_method=dist_url, world_size=args.world_size,
-                                    rank=args.rank)  # 分布式TCP初始化
+                                    rank=args.rank)  
 
         else:
             # logger.info('#################### Launch for DDP! ############################')
-            #     args.world_size = int(os.environ['SLURM_NTASKS'])
+            
             if 'RANK' not in os.environ:
                 raise RuntimeError('Distributed mode requires torchrun/srun environment variables. Use --distributed False for single-process runs.')
             args.world_size = int(os.environ['WORLD_SIZE']) if 'WORLD_SIZE' in os.environ else 1
-            #     #args.rank = int(os.environ['SLURM_PROCID']) #if 'RANK' in os.environ else 0
+            
             args.rank = int(os.environ["RANK"])
-            #     #args.rank = dist.get_rank()
-            #     #LOCAL_RANK = int(os.environ['SLURM_LOCALID'])
-            #     #LOCAL_RANK = int(os.environ['LOCAL_RANK'])
+           
             LOCAL_RANK = args.rank % torch.cuda.device_count()
-            #     #IP = os.environ['SLURM_STEP_NODELIST']
-            #     #DIST_URL = 'tcp://' + IP + ':' + str(port)
-            torch.cuda.set_device(LOCAL_RANK)  # 设置节点等级为GPU数
+            
+            torch.cuda.set_device(LOCAL_RANK)  
             dist.init_process_group(backend='nccl', init_method='env://', world_size=args.world_size,
-                                    rank=args.rank)  # 分布式TCP初始化
+                                    rank=args.rank)  
 
     device = torch.device(args.device)
 
@@ -335,8 +328,7 @@ def main(args):
                 print('load once')
                 print(name, ':', parameters)
 
-        # # TODO: change assert msg based on patch_embed
-        # if args.global_pool:
+        
         print(set(msg.missing_keys))
 
 
