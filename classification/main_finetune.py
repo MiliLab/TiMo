@@ -382,8 +382,6 @@ def main(args):
               f"acc5: {test_stats['acc5']:.2f}%")
         exit(0)
 
-    print('model_type', args.model_type)
-    print('dataset_type', args.dataset_type)
     print(f"Start training for {args.epochs} epochs")
     start_time = time.time()
     max_accuracy = 0.0
