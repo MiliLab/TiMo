@@ -242,7 +242,6 @@ if __name__ == '__main__':
 
     if args.make_ts_file:
         dataset = SeasonalContrastTemporal_v3(args.root)
-        dataset = torch.utils.data.Subset(dataset, range(10))
         with open("/data/xiaolei.qin/Dataset/tmp/TPCONPY_ts.csv", "w", newline="") as file:#please specify the csv file name to save
             data_root_patch = args.root
             for _,patch_id,patch_seasons in tqdm(dataset):
